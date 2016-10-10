@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="Caliburn.Views.UsersView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:cal="http://www.caliburnproject.org"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Caliburn.Views"
+      xmlns:vms="clr-namespace:Caliburn.ViewModels"       
+      mc:Ignorable="d" 
+      Background="AliceBlue"
+      d:DataContext="{d:DesignData Source=../DesignData/UsersViewDesignData.xaml ,IsDesignTimeCreatable=True}"
+      d:DesignHeight="300" d:DesignWidth="300"
+      >
+    
+    <!--d:DataContext="{d:DesignInstance Type=vms:UsersViewModel, IsDesignTimeCreatable=True}"
+      cal:Bind.AtDesignTime="True"-->
+    <!--The syntax above capitalizes on the caliburn syntax-->
+    
+    <!--This is without caliburn magic-->
+    <!-- d:DataContext="{d:DesignData Source=../DesignData/UsersViewDesignData.xaml ,IsDesignTimeCreatable=True}"     -->
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="Message: " Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="25" />
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Message}" cal:Message.Attach="[Event KeyUp] = [Action TextKeyUp($this.Text)]" />
+        <!--<TextBox x:Name="Message" Grid.Row="0" Grid.Column="1" cal:Message.Attach="[Event KeyUp] = [Action TextKeyUp($this.Text)]" />-->
+
+        <!--<TextBox x:Name="Input" Grid.Row="0" Grid.Column="1" Text="{Binding Message}" cal:Message.Attach="[Event KeyUp] = [Action TextKeyUp(Input.Text)]" />-->
+        <!--This is another way to bind things up manually on Caliburn through the cal:Message.Attach="[Event KeyUp] = [Action TextKeyUp]"-->
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding MessageCopy}" FontSize="18" TextWrapping="Wrap" />
+
+        <!--x:Name is wired to the method ShowMessage. It defaults to the default action-->
+        <Button x:Name="ShowMessage" Content="Show Message" Grid.Row="1" Grid.Column="1" />
+
+        <!--Had to get rid of Caliburn's special magic by adding ItemSource because of the ResourceDictionary-->
+        <ListBox x:Name="Users" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Users}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Grid DataContext="{Binding SelectedUser}" Grid.Row="2" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock Text="{Binding Name}" />
+            <TextBlock Text="{Binding Phone}" Grid.Row="1" />
+        </Grid>
+    </Grid>
+</UserControl>
